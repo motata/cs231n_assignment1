@@ -98,7 +98,15 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  mask = np.zeros(margin_b.shape)
+  mask[margin_b] = 1
+  correct = np.sum(mask, axis = 1) #each row means how many times scores are counted in
+  ar = np.arange(X.shape[0])
+  mask[ar,y] -= correct
+  dW = ((mask.transpose()).dot(X)).transpose()
+  dW /= X.shape[0]
+  dW += reg * W
+  
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
